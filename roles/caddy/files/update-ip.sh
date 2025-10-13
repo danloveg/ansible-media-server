@@ -103,11 +103,11 @@ while IFS="," read -r dns_record_id dns_record_name dns_record_type dns_record_c
     fi
 done
 
-if (( num_errors == 0 )); then
+if (( num_errors != 0 )); then
     log_error "Encountered ${num_errors} error(s) (see output above)"
 fi
 
-if (( num_updated == 0 )); then
+if (( num_updated != 0 )); then
     log_info "Updated ${num_updated} DNS records"
 fi
 
