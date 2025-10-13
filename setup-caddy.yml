@@ -14,10 +14,10 @@
       ansible.builtin.include_role:
         name: "caddy"
       vars:
-        caddy_timezone: {{ timezone }}
-        caddy_user_id: {{ caddy.user_id }}
-        caddy_group_id: {{ caddy.user_id }}
-        caddy_host_ip_is_static: {{ caddy.host_ip_is_static }}
+        caddy_timezone: "{{ timezone }}"
+        caddy_user_id: "{{ caddy.user_id }}"
+        caddy_group_id: "{{ caddy.user_id }}"
+        caddy_host_ip_is_static: "{{ caddy.host_ip_is_static }}"
         # Secrets in group_vars/all/vault.yml
-        caddy_cloudflare_api_token: {{ v_caddy_cloudflare_api_token }}
-        caddy_cloudflare_zone_id: {{ v_caddy_cloudflare_zone_id }}
+        caddy_cloudflare_api_token: "{{ v_caddy_cloudflare_api_token }}"
+        caddy_cloudflare_zone_id: "{{ v_caddy_cloudflare_zone_id }}"
