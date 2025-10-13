@@ -1,0 +1,9 @@
+{
+    acme_dns cloudflare {env.CF_API_TOKEN}
+}
+
+{% for proxy_host in caddy_reverse_proxy_hosts %}
+{{ proxy_host.domain_name }} {
+    reverse_proxy {{ proxy_host.container_name }}:{{ proxy_host.local_port }}
+}
+{% endfor %}

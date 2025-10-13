@@ -1,0 +1,27 @@
+[Unit]
+Description="Reverse proxy web services with automatic HTTPS via Caddy"
+
+[Container]
+Image=ghcr.io/iarekylew00t/caddy-cloudflare:2.10.2
+ContainerName=caddy
+
+# Shared network with other pods/containers
+Network=web-services.network
+
+# Capabilities
+AddCapability=NET_ADMIN
+
+# Environment variables
+Environment=PUID={{ caddy_user_id }}
+Environment=PGID={{ caddy_group_id }}
+Environment=TZ={{ caddy_timezone }}
+Environment=CF_API_TOKEN={{ caddy_cloudflare_api_token }}
+
+# Volumes
+Volume={{ caddy_caddyfile_path }}:/etc/caddy/Caddyfile:z
+Volume={{ caddy_data_path }}:/data:z
+Volume={{ caddy_config_path }}:/config:z
+
+[Install]
+# Start by default on boot
+WantedBy=default.target
