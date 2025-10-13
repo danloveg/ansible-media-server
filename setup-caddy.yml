@@ -20,5 +20,4 @@
         caddy_host_ip_is_static: {{ caddy.host_ip_is_static }}
         # Secrets in group_vars/all/vault.yml
         caddy_cloudflare_api_token: {{ v_caddy_cloudflare_api_token }}
-        caddy_cloudflare_email: {{ v_caddy_cloudflare_email }}
-        caddy_cloudflare_api_key: {{ v_caddy_cloudflare_api_key }}
+        caddy_cloudflare_zone_id: {{ v_caddy_cloudflare_zone_id }}

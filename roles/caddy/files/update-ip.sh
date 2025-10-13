@@ -8,8 +8,7 @@
 # Expects a .env file in the same directory as this file. This file should have
 # these variables:
 # - ZONE_ID: The zone ID for the DNS records you want to keep updated
-# - CLOUDFLARE_EMAIL: Your Cloudflare email, for authentication purposes
-# - CLOUDFLARE_API_KEY: Your Cloudflare API key, for authentication purposes
+# - CLOUDFLARE_API_TOKEN: Your Cloudflare API token, for authentication purposes
 #
 # Requires these tools:
 # - curl
@@ -39,17 +38,17 @@ if [[ -z "$ZONE_ID" ]]; then
     exit 1
 fi
 
-if [[ -z "$CLOUDFLARE_EMAIL" ]]; then
-    log_error "CLOUDFLARE_EMAIL is not set in ${ENV_FILE}!"
-    exit 1
-fi
-
-if [[ -z "$CLOUDFLARE_API_KEY" ]]; then
-    log_error "CLOUDFLARE_API_KEY is not set in ${ENV_FILE}!"
+if [[ -z "$CLOUDFLARE_API_TOKEN" ]]; then
+    log_error "CLOUDFLARE_API_TOKEN is not set in ${ENV_FILE}!"
     exit 1
 fi
 
 current_ipv4=$(curl --silent ifconfig.me)
+
+if [[ $? -ne 0 ]]; then
+    log_error "Could not get current IP address! Aborting."
+    exit 1
+fi
 
 log_info "Current IP address is $current_ipv4"
 
@@ -61,8 +60,7 @@ curl --silent \
      --request GET \
      --url https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records \
      --header 'Content-Type: application/json' \
-     --header "X-Auth-Email: $CLOUDFLARE_EMAIL" \
-     --header "X-Auth-Key: $CLOUDFLARE_API_KEY" | \
+     --header "Authorization: Bearer $CLOUDFLARE_API_TOKEN" | \
 jq -r '.result.[] | .id + "," + .name + "," + .type + "," + .content' | \
 while IFS="," read -r dns_record_id dns_record_name dns_record_type dns_record_content; do
     # Skip non-A records
@@ -83,8 +81,7 @@ while IFS="," read -r dns_record_id dns_record_name dns_record_type dns_record_c
              --request PUT \
              --url "https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records/$dns_record_id" \
              --header 'Content-Type: application/json' \
-             --header "X-Auth-Email: $CLOUDFLARE_EMAIL" \
-             --header "X-Auth-Key: $CLOUDFLARE_API_KEY" \
+             --header "Authorization: Bearer $CLOUDFLARE_API_TOKEN" | \
              --data \
         "{
             \"name\": \"$dns_record_name\",

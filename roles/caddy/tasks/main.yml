@@ -6,10 +6,10 @@
   when: caddy_cloudflare_api_token == "SECRET-REPLACE-ME"
 
 # Required when host IP is not static
-- name: Fail if Cloudflare API key is not set when host IP is not static
+- name: Fail if Cloudflare Zone ID is not set when host IP is not static
   ansible.builtin.fail:
-    msg: "You must replace the caddy_cloudflare_api_key with a real API key."
-  when: not caddy_host_ip_is_static and caddy_cloudflare_api_key == "SECRET-REPLACE-ME"
+    msg: "You must replace the caddy_cloudflare_zone_id with a real zone ID."
+  when: not caddy_host_ip_is_static and caddy_cloudflare_zone_id == "SECRET-REPLACE-ME"
 
 - name: Install required packages
   tags: packages
@@ -58,6 +58,13 @@
     owner: root
     group: root
     mode: '0755'
+
+- name: Enable and start firewall service
+  tags: fiewall
+  ansible.builtin.service:
+    name: firewalld
+    enabled: true
+    state: started
 
 - name: Expose required ports through firewall
   tags: firewall
