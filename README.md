@@ -25,7 +25,7 @@ ansible-galaxy collection install -r requirements.yml
 
 ### Remote Host Setup
 
-Prior to running the playbooks here, ensure there is a user account called `ansible` on the target (i.e., the remote home server), and that it has the ability to run sudo without a password.
+Prior to running the playbooks here, ensure there is a user account called `ansible` on the target (i.e., the remote home server), and that it has the ability to run sudo without a password. Run these commands on the remote server (sudo access needed):
 
 ```shell
 # Create user with a home directory
@@ -42,13 +42,13 @@ sudo echo "ansible ALL = (root) NOPASSWD:ALL" > /etc/sudoers.d/ansible
 
 Additionally, ensure you add the public key of your control node to the ansible user's `authorized_keys` file.
 
-First, make a public key if you don't have one.
+First, make a public key if you don't have one on your control node.
 
 ```shell
 ssh-keygen -t ed25519
 ```
 
-Then run the following command to add your public key to the ansible user's authorized keys. Substitute `home-server` with your home server's actual host name.
+Then run the following command from your control node to add your public key to the ansible user's authorized keys. Substitute `home-server` with your home server's actual host name.
 
 ```shell
 ssh ansible@home-server sh -c "cat - >> ~/.ssh/authorized_keys" < ~/.ssh/id_ed25119.pub
