@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "*.yaml": "ansible",
+        "*.yml": "ansible",
+        "*.j2": "ansible-jinja"
+    },
+    "ansible.python.interpreterPath": "${workspaceFolder}/.venv/bin/python"
+}
