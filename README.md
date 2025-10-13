@@ -62,6 +62,24 @@ Then run the following command from your control node to add your public key to 
 ssh ansible@home-server sh -c "cat - >> ~/.ssh/authorized_keys" < ~/.ssh/id_ed25119.pub
 ```
 
+### Inventory
+
+You should add your home server's IP address or host name to the `homeserver` host in the `inventory/hosts.yml` file.
+
+To encrypt your own `ansible_host`, you can use:
+
+```shell
+ansible-vault encrypt_string 'remote-server' --name 'ansible_host'
+```
+
+Substituting `remote-server` with your remote host's actual IP or host name. You can then paste that into the `hosts.yml` file.
+
+You can test running commands on the remote host with:
+
+```shell
+ansible all -m command -a "uptime" -i inventory
+```
+
 ## Secrets
 
 It's recommended to store API tokens and other secret variables in an Ansible vault. If you create an Ansible vault at `group_vars/all/vault.yml`, Ansible will pick them up automatically. You can store the password to the vault anywhere outside of this repository, but I store it in a file called `~/.ansible_vault_password`.
