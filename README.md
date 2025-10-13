@@ -64,7 +64,7 @@ ssh ansible@home-server sh -c "cat - >> ~/.ssh/authorized_keys" < ~/.ssh/id_ed25
 
 ## Secrets
 
-There are secret variables like API tokens stored in an Ansible vault. The vault file is in `group_vars/all`. You can store the vault password anywhere outside of this repository. I store it in a file called `~/.ansible_vault_password`.
+It's recommended to store API tokens and other secret variables in an Ansible vault. If you create an Ansible vault at `group_vars/all/vault.yml`, Ansible will pick them up automatically. You can store the password to the vault anywhere outside of this repository, but I store it in a file called `~/.ansible_vault_password`.
 
 You can edit the variables in the encrypted file with:
 

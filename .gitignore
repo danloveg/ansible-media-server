@@ -1,3 +1,4 @@
 .ansible
 .ansible_vault_password
 .venv
+group_vars/all/vault.yml
