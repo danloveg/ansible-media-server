@@ -99,3 +99,50 @@ All encrypted variables are given a `v_` prefix. Deploying some services require
 ## Editor Setup
 
 If you're using VSCode, install recommended extensions by searching for `@recommended` in the extensions search box and install all the extensions listed there.
+
+## Playbook: setup-caddy.yml
+
+Caddy is used to reverse proxy the services on the media server so that they can be served over HTTPS on the web.
+
+Caddy can be set up with the `setup-caddy.yml` playbook. The `caddy` role assumes you are using Cloudflare for your domains, so requires at minimum a Cloudflare API token to authenticate with.
+
+**You should run this playbook *after* setting up the services that will be reverse proxied**. Otherwise, Caddy will complain about not being able to get certificates for your domains.
+
+```shell
+ansible-playbook -i inventory setup-caddy.yml
+```
+
+The services that caddy reverse proxies should be defined in `host_vars/homeserver.yml`. The `reverse_proxy_hosts` should be a list of objects containing three attributes (see below). For example, this will set Caddy to reverse proxy two services:
+
+```yaml
+caddy:
+  reverse_proxy_hosts:
+    - domain_name: the-public.domain.com
+      container_name: the_container_name
+      port: the_exposed_port
+    - domain_name: example.com
+      container_name: the_other_container_name
+      port: the_other_exposed_port
+```
+
+Any container or pod that uses the `web-services.network` can be reverse proxied by Caddy.
+
+If your host does not have a static IP (e.g., if your ISP does not allow it), there is an included script that is deployed that will update the IPv4 address of your domains to the host's IP address whenever it changes. To enable this feature, set:
+
+```yaml
+caddy:
+  host_ip_is_static: false
+```
+
+And the script will be deployed automatically. All of the DNS records within the set `caddy_cloudflare_zone_id` (i.e., the given Zone in Cloudflare) will have the IP address of their DNS A records set to the remote host's IP address.
+
+Note that you will need to enable port forwarding for ports 80/tcp, 443/tcp, and 443/udp on your router as well if you want your services publicly accessible.
+
+### Secret Variables
+
+These variable needs to be set before running this playbook:
+
+| Name                         | Description                                                  | Requirement                |
+| ---------------------------- | ------------------------------------------------------------ | -------------------------- |
+| v_caddy_cloudflare_api_token | The cloudflare API token used for authentication             | Always required            |
+| v_caddy_cloudflare_zone_id   | The zone ID of the DNS records pointing to the remote server | When host IP is not static |
