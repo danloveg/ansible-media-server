@@ -4,6 +4,6 @@
 
 {% for proxy_host in caddy_reverse_proxy_hosts %}
 {{ proxy_host.domain_name }} {
-    reverse_proxy {{ proxy_host.container_name }}:{{ proxy_host.local_port }}
+    reverse_proxy {{ proxy_host.container_name }}:{{ proxy_host.port }}
 }
 {% endfor %}
