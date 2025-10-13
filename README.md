@@ -54,6 +54,22 @@ Then run the following command to add your public key to the ansible user's auth
 ssh ansible@home-server sh -c "cat - >> ~/.ssh/authorized_keys" < ~/.ssh/id_ed25119.pub
 ```
 
+## Secrets
+
+There are secret variables like API tokens stored in an Ansible vault. The vault file is in `group_vars/all`. You can store the vault password anywhere outside of this repository. I store it in a file called `~/.ansible_vault_password`.
+
+You can edit the variables in the encrypted file with:
+
+```shell
+export ANSIBLE_VAULT_PASSWORD_FILE=~/.ansible_vault_password
+export EDITOR=vim
+ansible-vault edit group_vars/all/vault.yml
+```
+
+### Required Secrets
+
+All encrypted variables are given a `v_` prefix. Deploying some services require certain secrets to be set, see the description for each service.
+
 ## Editor Setup
 
 If you're using VSCode, install recommended extensions by searching for `@recommended` in the extensions search box and install all the extensions listed there.
