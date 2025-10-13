@@ -1,0 +1,149 @@
+---
+# Always required
+- name: Fail if Cloudflare API token is not set
+  ansible.builtin.fail:
+    msg: "You must replace the caddy_cloudflare_api_token with a real API token."
+  when: caddy_cloudflare_api_token == "SECRET-REPLACE-ME"
+
+# Required when host IP is not static
+- name: Fail if Cloudflare API key is not set when host IP is not static
+  ansible.builtin.fail:
+    msg: "You must replace the caddy_cloudflare_api_key with a real API key."
+  when: not caddy_host_ip_is_static and caddy_cloudflare_api_key == "SECRET-REPLACE-ME"
+
+- name: Install required packages
+  tags: packages
+  become: true
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - podman
+    - python3-firewall
+  loop_control:
+    label: "Install {{ item }}"
+
+# Needed for the update-ip.sh script
+- name: Install optional packages
+  tags: packages
+  become: true
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - jq
+    - curl
+  loop_control:
+    label: "Install {{ item }}"
+  when: not caddy_host_ip_is_static
+
+- name: Create required directories
+  become: true
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: podman
+    group: podman
+    mode: '0755'
+  loop:
+    - "{{ caddy_data_path }}"
+    - "{{ caddy_config_path }}"
+    - "{{ caddy_caddyfile_path | dirname }}"
+
+- name: Create container systemd unit file directory
+  become: true
+  ansible.builtin.file:
+    path: "/etc/containers/systemd"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Expose required ports through firewall
+  tags: firewall
+  become: true
+  ansible.posix.firewalld:
+    permanent: true
+    immediate: true
+    port: "{{ item }}"
+    state: enabled
+    zone: public
+  loop:
+    - "80/tcp"
+    - "443/tcp"
+    - "443/udp"
+  when: caddy_reverse_proxy_hosts
+
+- name: Deploy Caddyfile
+  become: true
+  ansible.builtin.template:
+    src: Caddyfile.j2
+    dest: "{{ caddy_caddyfile_path }}"
+    owner: podman
+    group: podman
+    mode: '0644'
+  notify: Restart caddy
+
+- name: Deploy shared web-services network definition
+  become: true
+  ansible.builtin.copy:
+    src: web-services.network
+    dest: /etc/containers/systemd/web-services.network
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Restart caddy
+
+- name: Deploy caddy container definition
+  tags: containers
+  become: true
+  ansible.builtin.template:
+    src: caddy-cloudflare.container.j2
+    dest: /etc/containers/systemd/caddy-cloudflare.container
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Restart caddy
+
+- name: Create Cloudflare DNS update script directory
+  tags: dns
+  become: true
+  ansible.builtin.file:
+    path: "{{ caddy_cloudflare_script_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+  when: not caddy_host_ip_is_static
+
+- name: Deploy Cloudflare environment variable file
+  tags: dns
+  become: true
+  ansible.builtin.template:
+    src: cloudflare.env.j2
+    dest: "{{ caddy_cloudflare_script_dir }}/.env"
+    owner: root
+    group: root
+    mode: '0600'
+  when: not caddy_host_ip_is_static
+
+- name: Deploy Cloudflare IP update script
+  tags: dns
+  become: true
+  ansible.builtin.copy:
+    src: "update-ip.sh"
+    dest: "{{ caddy_cloudflare_script_dir }}/update-ip.sh"
+    owner: root
+    group: root
+    mode: '0755'
+  when: not caddy_host_ip_is_static
+
+- name: Set up cron job for Cloudflare IP updates
+  tags: dns
+  become: true
+  ansible.builtin.cron:
+    name: "Update Cloudflare DNS record(s) with current IP"
+    minute: "*/15"
+    job: "{{ caddy_cloudflare_script_dir }}/update-ip.sh"
+    user: root
+  when: not caddy_host_ip_is_static

@@ -1,0 +1,20 @@
+# This secret is always required
+caddy_cloudflare_api_token: "SECRET-REPLACE-ME"
+
+# Optional secrets to define (required when caddy_host_ip_is_static == false)
+caddy_cloudflare_api_key: "SECRET-REPLACE-ME"
+caddy_cloudflare_email: "SECRET-REPLACE-ME"
+caddy_cloudflare_zone_id: "SECRET-REPLACE-ME"
+
+caddy_host_ip_is_static: true
+
+caddy_timezone: America/Winnipeg
+caddy_user_id: 1000
+caddy_group_id: 1000
+
+caddy_caddyfile_path: /opt/caddy/Caddyfile
+caddy_data_path: /opt/caddy/data
+caddy_config_path: /opt/caddy/config
+
+# Override with hosts to proxy
+caddy_reverse_proxy_hosts: []
