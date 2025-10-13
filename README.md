@@ -100,6 +100,26 @@ All encrypted variables are given a `v_` prefix. Deploying some services require
 
 If you're using VSCode, install recommended extensions by searching for `@recommended` in the extensions search box and install all the extensions listed there.
 
+## Playbook: setup-podman-user.yml
+
+The `podman` user is used extensively to provide a non-root user for storing configuration files and for running containers as a non-root user.
+
+**This playbook should be run first on a new server.** This is because the other playbooks depend on this user existing.
+
+To create the `podman` user with user ID and group ID 1010, run:
+
+```shell
+ansible-playbook -i inventory setup-podman-user.yml
+```
+
+### Secret Variables
+
+This variable needs to be set before running this playbook:
+
+| Name                   | Description                                    | Requirement     |
+| ---------------------- | ---------------------------------------------- | --------------- |
+| v_podman_user_password | The hashed value of the podman user's password | Always required |
+
 ## Playbook: setup-caddy.yml
 
 Caddy is used to reverse proxy the services on the media server so that they can be served over HTTPS on the web.

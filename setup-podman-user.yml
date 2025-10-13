@@ -1,0 +1,25 @@
+- name: Create Podman user
+  hosts: homeserver
+  become: true
+  gather_facts: false
+
+  tasks:
+    - name: Add podman group for podman user
+      tags: users
+      ansible.builtin.group:
+        name: podman
+        state: present
+        gid: 1010
+
+    - name: Add podman user to run containers under
+      tags: users
+      ansible.builtin.user:
+        name: podman
+        uid: 1010
+        append: true
+        # This needs to be a hashed password
+        password: "{{ v_podman_user_password }}"
+        groups:
+          - render
+          - video
+          - podman
