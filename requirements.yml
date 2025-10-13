@@ -1,0 +1,7 @@
+---
+collections:
+  - name: ansible.posix
+    source: https://galaxy.ansible.com
+
+  - name: containers.podman
+    source: https://galaxy.ansible.com
