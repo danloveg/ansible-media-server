@@ -14,10 +14,18 @@ After installing `uv`, pull this repository and run:
 
 ```shell
 uv venv
+source .venv/bin/activate
 uv sync
 ```
 
-You will need to make sure the requirements are installed before running any playbooks:
+If you're using VSCode, you'll need to set the Python interpeter Path.
+
+- Press **CTRL + Shift + P**
+- Enter **Python: Select Interpreter**
+- Select **.venv/bin/python**
+- Restart your terminal if you have one open. You should see `(ansible-media-server)` at the start of your prompt if the virtual environment is activated correctly.
+
+Prior to running any playbooks, double check that the required Ansible collections are installed:
 
 ```shell
 ansible-galaxy collection install -r requirements.yml
