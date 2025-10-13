@@ -1,0 +1,6 @@
+[Unit]
+Description="Shared network for external web access to services"
+
+[Network]
+Driver=bridge
+Internal=false
