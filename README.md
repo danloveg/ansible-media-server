@@ -2,6 +2,16 @@
 
 Set up home media server automatically with [Ansible](https://docs.ansible.com/ansible/latest/getting_started/introduction.html).
 
+The playbooks in this media server can be used to set up:
+
+- [copyparty](https://github.com/9001/copyparty) for sharing and uploading files.
+- [Jellyfin](https://jellyfin.org/) for viewing media.
+- [Calibre](https://calibre-ebook.com/) and [calibre-web](https://github.com/janeczku/calibre-web) for uploading and reading books.
+- A set of \*arr apps I use, including Radarr, Sonarr, Prowlarr, SABnzbd, and Jellyseerr.
+- [Caddy](https://caddyserver.com/) for reverse proxying services so they're available on the web.
+
+*All* deployed services using these playbooks are run in containers using Podman.
+
 ## Ansible Setup
 
 These steps will enable you to run the playbooks from your control node on the media server remote.
