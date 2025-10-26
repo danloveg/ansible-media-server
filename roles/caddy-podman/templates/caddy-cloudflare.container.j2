@@ -11,6 +11,11 @@ Network=web-services.network
 # Capabilities
 AddCapability=NET_ADMIN
 
+# Expose HTTP and HTTPS traffic from this container
+PublishPort=80:80/tcp
+PublishPort=443:443/tcp
+PublishPort=443:443/udp
+
 # Environment variables
 Environment=PUID={{ caddy_user_id }}
 Environment=PGID={{ caddy_group_id }}
