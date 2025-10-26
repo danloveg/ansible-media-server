@@ -15,4 +15,6 @@ jellyfin_domain: localhost
 jellyfin_config_dir: /opt/jellyfin/config
 
 # Where you will store your media for jellyfin to serve
-jellyfin_media_dir: /media/
+# Note, this should be within starrapps_media_root_dir. See:
+# https://wiki.servarr.com/docker-guide#media-server
+jellyfin_media_dir: /data/media/

@@ -1,0 +1,24 @@
+[Unit]
+Description="Movie manager for usenet/torrent"
+
+[Container]
+Image=ghcr.io/hotio/radarr:release-5.17.2.9580
+ContainerName=radarr
+Pod=starrapps.pod
+
+# Environment variables
+Environment=PUID={{ starrapps_user_id }}
+Environment=PGID={{ starrapps_group_id }}
+Environment=TZ={{ starrapps_timezone }}
+
+# Volumes
+# https://wiki.servarr.com/docker-guide#sonarr-radarr-and-lidarr
+Volume={{ starrapps_radarr_config_dir }}:/config:z
+Volume={{ starrapps_media_root_dir }}:/data:z
+
+[Install]
+# Start by default on boot
+WantedBy=default.target
+
+[Service]
+TimeoutStartSec=900

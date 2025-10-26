@@ -2,6 +2,11 @@ starrapps_timezone: America/Winnipeg
 starrapps_user_id: 1000
 starrapps_group_id: 1000
 
+# These directories are optimal as following the documentation here:
+# https://wiki.servarr.com/docker-guide#examples
+starrapps_media_root_dir: /data/
+starrapps_media_usenet_dir: /data/usenet/
+
 # Jellyseerr configuration
 starrapps_jellyseerr_port: 5055
 starrapps_jellyseer_config_dir: /opt/jellyseerr/config/
@@ -12,6 +17,7 @@ starrapps_prowlarr_config_dir: /opt/prowlarr/config/
 
 # Radarr configuration
 starrapps_radarr_port: 7878
+starrapps_radarr_config_dir: /opt/radarr/config/
 
 # SABnzbd configuration
 starrapps_sabnznd_port: 8080
