@@ -4,27 +4,12 @@
     msg: "You must set a domain name with jellyfin_domain when reverse proxying jellyfin"
   when: jellyfin_reverse_proxy and jellyfin_domain == "localhost"
 
-- name: Install required packages
+- name: Install podman
   tags: packages
   become: true
   ansible.builtin.package:
-    name: "{{ item }}"
+    name: podman
     state: present
-  loop:
-    - podman
-    - python3-firewall
-  loop_control:
-    label: "Install {{ item }}"
-
-- name: Expose jellyfin port through firewall
-  tags: firewall
-  become: true
-  ansible.posix.firewalld:
-    permanent: true
-    immediate: true
-    port: "{{ jellyfin_port }}/tcp"
-    state: enabled
-    zone: public
 
 - name: Create config and media directories
   tags: config

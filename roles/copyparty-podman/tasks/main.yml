@@ -4,27 +4,12 @@
     msg: "You must set a domain name with copyparty_domain when reverse proxying copyparty"
   when: copyparty_reverse_proxy and copyparty_domain == "localhost"
 
-- name: "Ensure packages are installed"
+- name: Install podman
   tags: packages
   become: true
   ansible.builtin.package:
-    name: "{{ item }}"
+    name: podman
     state: present
-  loop:
-    - podman
-    - python3-firewall
-  loop_control:
-    label: "Install {{ item }}"
-
-- name: Expose copyparty port through firewall
-  tags: firewall
-  become: true
-  ansible.posix.firewalld:
-    permanent: true
-    immediate: true
-    port: "{{ copyparty_port }}/tcp"
-    state: enabled
-    zone: public
 
 - name: Create config directory
   tags: config
