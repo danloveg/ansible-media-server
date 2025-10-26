@@ -8,6 +8,7 @@ starrapps_jellyseer_config_dir: /opt/jellyseerr/config/
 
 # Prowlarr configuration
 starrapps_prowlarr_port: 9696
+starrapps_prowlarr_config_dir: /opt/prowlarr/config/
 
 # Radarr configuration
 starrapps_radarr_port: 7878
