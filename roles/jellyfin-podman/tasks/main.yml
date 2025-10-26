@@ -16,7 +16,18 @@
   loop_control:
     label: "Install {{ item }}"
 
-- name: Create required directories
+- name: Expose jellyfin port through firewall
+  tags: firewall
+  become: true
+  ansible.posix.firewalld:
+    permanent: true
+    immediate: true
+    port: "{{ jellyfin_port }}/tcp"
+    state: enabled
+    zone: public
+
+- name: Create config and media directories
+  tags: config
   become: true
   ansible.builtin.file:
     path: "{{ item }}"
@@ -29,6 +40,7 @@
     - "{{ jellyfin_config_dir }}"
 
 - name: Create container systemd unit file directory
+  tags: container
   become: true
   ansible.builtin.file:
     path: "/etc/containers/systemd"
@@ -38,6 +50,7 @@
     mode: '0755'
 
 - name: Deploy shared web-services network definition
+  tags: container
   become: true
   ansible.builtin.copy:
     src: web-services.network  # file comes from common role
@@ -49,7 +62,7 @@
   notify: Restart jellyfin
 
 - name: Deploy jellyfin container definition
-  tags: containers
+  tags: container
   become: true
   ansible.builtin.template:
     src: jellyfin.container.j2
