@@ -1,0 +1,40 @@
+[global]
+  usernames  # Require a username to log in
+  e2dsa      # enable file indexing and filesystem scanning
+  e2ts       # enable multimedia indexing
+  ansi       # enable colors in log messages
+
+  # Enable sharing
+  {% if copyparty_enable_sharing %}
+  shr: {{ copyparty_share_dir }}
+  {% endif %}
+
+  {% if copyparty_reverse_proxy %}
+  # Make sure IP is detected properly with cloudflare header
+  rproxy: 1
+  xff-hdr: cf-connecting-ip
+  {% endif %}
+
+  # Store history and database in config directory
+  hist: /cfg/hists/
+
+  # p: 3939          # listen on another port
+  # ipa: 10.89.      # only allow connections from 10.89.*
+  # ver              # show copyparty version in the controlpanel
+  # grid             # show thumbnails/grid-view by default
+  # theme: 2         # monokai
+  # name: datasaver  # change the server-name that's displayed in the browser
+  # stats, nos-dup   # enable the prometheus endpoint, but disable the dupes counter (too slow)
+
+  df: 16               # stop accepting uploads if less than 16 GB free disk space
+  no-robots, force-js  # make it harder for search engines to read your server
+
+[accounts]
+  {{ copyparty_admin_username }}: {{ copyparty_admin_password }}
+
+{% for volume in copyparty_volumes %}
+[{{ volume.web_path }}]
+  {{ volume.container_path }}
+  accs:
+    rwdma: {{ copyparty_admin_username }}
+{% endfor%}

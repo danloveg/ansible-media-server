@@ -14,6 +14,14 @@ copyparty_domain: localhost
 # Where copyparty config files will be stored on the host (not in the container)
 copyparty_config_dir: /opt/copyparty/config
 
+# Enable sharing, and set the path on the web server where files are shared
+copyparty_enable_sharing: true
+copyparty_share_dir: /share/
+
+# These secrets are always required
+copyparty_admin_username: "SECRET-REPLACE-ME"
+copyparty_admin_password: "SECRET-REPLACE-ME"
+
 # List of directories you want to share via copyparty
 copyparty_volumes:
   - web_path: "/"
