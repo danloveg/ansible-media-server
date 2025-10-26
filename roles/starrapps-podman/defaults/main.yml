@@ -24,3 +24,4 @@ starrapps_sabnznd_port: 8080
 
 # Sonarr configuration
 starrapps_sonarr_port: 8989
+starrapps_sonarr_config_dir: /opt/sonarr/config/

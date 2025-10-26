@@ -1,0 +1,24 @@
+[Unit]
+Description="TV Show manager for usenet/torrent"
+
+[Container]
+Image=ghcr.io/hotio/sonarr:release-4.0.15.2941
+ContainerName=sonarr
+Pod=starrapps.pod
+
+# Environment variables
+Environment=PUID={{ starrapps_user_id }}
+Environment=PGID={{ starrapps_group_id }}
+Environment=TZ={{ starrapps_timezone }}
+
+# Volumes
+# https://wiki.servarr.com/docker-guide#sonarr-radarr-and-lidarr
+Volume={{ starrapps_sonarr_config_dir }}:/config:z
+Volume={{ starrapps_media_root_dir }}:/data:z
+
+[Install]
+# Start by default on boot
+WantedBy=default.target
+
+[Service]
+TimeoutStartSec=900
