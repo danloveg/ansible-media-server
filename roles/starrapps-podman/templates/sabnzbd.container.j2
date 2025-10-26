@@ -1,0 +1,20 @@
+[Unit]
+Description="Automated usenet downloader"
+
+[Container]
+Image=ghcr.io/hotio/sabnzbd:release-4.5.5
+ContainerName=sabnzbd
+Pod=starrapps.pod
+
+# Environment variables
+Environment=PUID={{ starrapps_user_id }}
+Environment=PGID={{ starrapps_group_id }}
+Environment=TZ={{ starrapps_timezone }}
+
+# Volumes
+# https://wiki.servarr.com/docker-guide#usenet
+Volume={{ starrapps_sabnzbd_config_dir }}:/config:z
+Volume={{ starrapps_media_usenet_dir }}:/data/usenet:z
+
+[Service]
+TimeoutStartSec=900

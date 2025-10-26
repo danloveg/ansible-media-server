@@ -21,6 +21,7 @@ starrapps_radarr_config_dir: /opt/radarr/config/
 
 # SABnzbd configuration
 starrapps_sabnznd_port: 8080
+starrapps_sabnzbd_config_dir: /opt/sabnzbd/config/
 
 # Sonarr configuration
 starrapps_sonarr_port: 8989
