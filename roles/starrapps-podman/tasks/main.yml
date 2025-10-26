@@ -6,4 +6,119 @@
     name: podman
     state: present
 
+- name: Create config directories
+  tags: config
+  become: true
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: podman
+    group: podman
+    mode: '0755'
+  loop:
+    - "{{ starrapps_jellyseerr_config_dir }}"
+    - "{{ starrapps_prowlarr_config_dir }}"
+    - "{{ starrapps_radarr_config_dir }}"
+    - "{{ starrapps_sabnzbd_config_dir }}"
+    - "{{ starrapps_sonarr_config_dir }}"
 
+- name: Create media directories
+  tags: config
+  become: true
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: podman
+    group: podman
+    mode: '0755'
+  loop:
+    - "{{ starrapps_media_root_dir }}"
+    - "{{ starrapps_media_usenet_dir }}"
+
+- name: Create container systemd unit file directory
+  tags: container
+  become: true
+  ansible.builtin.file:
+    path: "/etc/containers/systemd"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Deploy shared web-services network definition
+  tags: container
+  become: true
+  ansible.builtin.copy:
+    src: web-services.network  # file comes from common role
+    dest: /etc/containers/systemd/web-services.network
+    owner: root
+    group: root
+    mode: '0644'
+  when: starrapps_jellyseerr_reverse_proxy
+  notify: Restart starrapps-pod
+
+- name: Deploy pod definition for starrapps services
+  tags: container
+  become: true
+  ansible.builtin.template:
+    src: starrapps.pod.j2
+    dest: /etc/containers/systemd/starrapps.pod
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Restart starrapps-pod
+
+- name: Deploy jellyseerr container definition
+  tags: container
+  become: true
+  ansible.builtin.template:
+    src: jellyseerr.container.j2
+    dest: /etc/containers/systemd/jellyseerr.container
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Restart starrapps-pod
+
+- name: Deploy prowlarr container definition
+  tags: container
+  become: true
+  ansible.builtin.template:
+    src: prowlarr.container.j2
+    dest: /etc/containers/systemd/prowlarr.container
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Restart starrapps-pod
+
+- name: Deploy sabnzbd container definition
+  tags: container
+  become: true
+  ansible.builtin.template:
+    src: sabnzbd.container.j2
+    dest: /etc/containers/systemd/sabnzbd.container
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Restart starrapps-pod
+
+- name: Deploy sonarr container definition
+  tags: container
+  become: true
+  ansible.builtin.template:
+    src: sonarr.container.j2
+    dest: /etc/containers/systemd/sonarr.container
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Restart starrapps-pod
+
+- name: Deploy radarr container definition
+  tags: container
+  become: true
+  ansible.builtin.template:
+    src: radarr.container.j2
+    dest: /etc/containers/systemd/radarr.container
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Restart starrapps-pod
