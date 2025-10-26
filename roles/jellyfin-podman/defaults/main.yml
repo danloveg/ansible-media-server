@@ -1,0 +1,12 @@
+jellyfin_timezone: America/Winnipeg
+jellyfin_user_id: 1000
+jellyfin_group_id: 1000
+
+# Set to true to reverse proxy
+jellyfin_reverse_proxy: false
+
+# Set to actual domain if reverse proxying (without https://)
+jellyfin_domain: localhost
+
+jellyfin_config_dir: /opt/jellyfin/config
+jellyfin_media_dir: /media/

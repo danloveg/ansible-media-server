@@ -1,0 +1,37 @@
+[Unit]
+Description="Open-source media system"
+
+[Container]
+Image=ghcr.io/hotio/jellyfin:release-10.11.0
+ContainerName=jellyfin
+{% if jellyfin_reverse_proxy %}
+Network=web-services.network
+{% endif %}
+
+# Devices
+AddDevice=/dev/dri/renderD128
+AddDevice=/dev/dri/card0
+
+# Environment variables
+Environment=PUID={{ jellyfin_user_id }}
+Environment=PGID={{ jellyfin_group_id }}
+Environment=TZ={{ jellyfin_timezone }}
+{% if jellyfin_reverse_proxy %}
+Environment=JELLYFIN_PublishedServerUrl=https://{{ jellyfin_domain }}
+{% endif %}
+Environment=JELLYFIN_DATA_DIR=/config/data
+Environment=JELLYFIN_CONFIG_DIR=/config
+Environment=JELLYFIN_LOG_DIR=/config/log
+Environment=JELLYFIN_CACHE_DIR=/config/cache
+
+# Volumes
+Volume={{ jellyfin_config_dir }}:/config:z
+Volume={{ jellyfin_media_dir }}:/media:z
+
+[Service]
+# Inform systemd of additional exit status
+SuccessExitStatus=0 143
+
+[Install]
+# Start by default on boot
+WantedBy=default.target
