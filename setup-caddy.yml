@@ -12,7 +12,7 @@
 
     - name: Set up Caddy for reverse proxying services
       ansible.builtin.include_role:
-        name: "caddy"
+        name: "caddy-podman"
       vars:
         caddy_timezone: "{{ timezone }}"
         caddy_user_id: "{{ caddy.user_id }}"
