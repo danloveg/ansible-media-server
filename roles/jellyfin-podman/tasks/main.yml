@@ -1,0 +1,60 @@
+---
+- name: Fail if reverse proxying and domain is localhost
+  ansible.builtin.fail:
+    msg: "You must set a domain name with jellyfin_domain when reverse proxying jellyfin"
+  when: jellyfin_reverse_proxy and jellyfin_domain == "localhost"
+
+- name: Install required packages
+  tags: packages
+  become: true
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - podman
+    - python3-firewall
+  loop_control:
+    label: "Install {{ item }}"
+
+- name: Create required directories
+  become: true
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: podman
+    group: podman
+    mode: '0755'
+  loop:
+    - "{{ jellyfin_media_dir }}"
+    - "{{ jellyfin_config_dir }}"
+
+- name: Create container systemd unit file directory
+  become: true
+  ansible.builtin.file:
+    path: "/etc/containers/systemd"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Deploy shared web-services network definition
+  become: true
+  ansible.builtin.copy:
+    src: web-services.network  # file comes from common role
+    dest: /etc/containers/systemd/web-services.network
+    owner: root
+    group: root
+    mode: '0644'
+  when: jellyfin_reverse_proxy
+  notify: Restart jellyfin
+
+- name: Deploy jellyfin container definition
+  tags: containers
+  become: true
+  ansible.builtin.template:
+    src: jellyfin.container.j2
+    dest: /etc/containers/systemd/jellyfin.container
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Restart jellyfin
