@@ -8,9 +8,6 @@ copyparty_port: 3923
 # Set to true to reverse proxy
 copyparty_reverse_proxy: false
 
-# Set to actual domain if reverse proxying (without https://)
-copyparty_domain: localhost
-
 # Where copyparty config files will be stored on the host (not in the container)
 copyparty_config_dir: /opt/copyparty/config
 

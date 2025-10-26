@@ -1,9 +1,4 @@
 ---
-- name: Fail if reverse proxying and domain is localhost
-  ansible.builtin.fail:
-    msg: "You must set a domain name with copyparty_domain when reverse proxying copyparty"
-  when: copyparty_reverse_proxy and copyparty_domain == "localhost"
-
 - name: Install podman
   tags: packages
   become: true

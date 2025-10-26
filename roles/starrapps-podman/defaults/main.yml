@@ -11,7 +11,6 @@ starrapps_media_usenet_dir: /data/usenet/
 starrapps_jellyseerr_port: 5055
 starrapps_jellyseerr_config_dir: /opt/jellyseerr/config/
 starrapps_jellyseerr_reverse_proxy: false
-starrapps_jellyseerr_domain: localhost
 
 # Prowlarr configuration
 starrapps_prowlarr_port: 9696
