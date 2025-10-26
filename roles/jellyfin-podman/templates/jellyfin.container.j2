@@ -12,6 +12,9 @@ Network=web-services.network
 AddDevice=/dev/dri/renderD128
 AddDevice=/dev/dri/card0
 
+# Ports
+PublishPort={{ jellyfin_port }}:8096
+
 # Environment variables
 Environment=PUID={{ jellyfin_user_id }}
 Environment=PGID={{ jellyfin_group_id }}

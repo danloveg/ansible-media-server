@@ -2,6 +2,9 @@ jellyfin_timezone: America/Winnipeg
 jellyfin_user_id: 1000
 jellyfin_group_id: 1000
 
+# Port exposed from container (not the port jellyfin listens on in the container)
+jellyfin_port: 8096
+
 # Set to true to reverse proxy
 jellyfin_reverse_proxy: false
 
