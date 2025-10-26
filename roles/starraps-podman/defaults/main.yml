@@ -1,0 +1,5 @@
+starrapps_jellyseerr_port: 5055
+starrapps_radarr_por: 7878
+starrapps_sabnznd_port: 8080
+starrapps_sonarr_port: 8989
+starrapps_prowlarr_port: 9696
