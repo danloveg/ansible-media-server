@@ -16,9 +16,5 @@ Environment=TZ={{ starrapps_timezone }}
 Volume={{ starrapps_radarr_config_dir }}:/config:z
 Volume={{ starrapps_media_root_dir }}:/data:z
 
-[Install]
-# Start by default on boot
-WantedBy=default.target
-
 [Service]
 TimeoutStartSec=900

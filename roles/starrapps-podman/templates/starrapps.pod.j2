@@ -1,3 +1,6 @@
+[Unit]
+Description="Download and request movies and TV shows"
+
 [Pod]
 PodName=starrapps
 PublishPort={{ starrapps_jellyseerr_port }}:5055
@@ -9,3 +12,7 @@ PublishPort={{ starrapps_prowlarr_port }}:9696
 {% if starrapps_reverse_proxy %}
 Network=web-services.network
 {% endif %}
+
+[Install]
+# Start by default on boot
+WantedBy=default.target

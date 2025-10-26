@@ -14,9 +14,5 @@ Environment=TZ={{ starrapps_timezone }}
 # Volumes
 Volume={{ starrapps_jellyseerr_config_dir }}:/config:z
 
-[Install]
-# Start by default on boot
-WantedBy=default.target
-
 [Service]
 TimeoutStartSec=900
