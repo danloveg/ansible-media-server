@@ -1,0 +1,5 @@
+---
+- name: Fail if reverse proxying jellyseerr and domain is localhost
+  ansible.builtin.fail:
+    msg: "You must set a domain name with starrapps_jellyseerr_domain when reverse proxying jellyseerr"
+  when: starrapps_jellyseerr_reverse_proxy and starrapps_jellyseerr_domain == "localhost"

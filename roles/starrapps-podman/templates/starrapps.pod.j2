@@ -9,7 +9,7 @@ PublishPort={{ starrapps_sabnznd_port }}:8080
 PublishPort={{ starrapps_sonarr_port }}:8989
 PublishPort={{ starrapps_prowlarr_port }}:9696
 
-{% if starrapps_reverse_proxy %}
+{% if starrapps_jellyseerr_reverse_proxy %}
 Network=web-services.network
 {% endif %}
 
