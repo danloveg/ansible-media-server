@@ -11,5 +11,8 @@ jellyfin_reverse_proxy: false
 # Set to actual domain if reverse proxying (without https://)
 jellyfin_domain: localhost
 
+# Where jellyfin config files will be stored on the host (not in the container)
 jellyfin_config_dir: /opt/jellyfin/config
+
+# Where you will store your media for jellyfin to serve
 jellyfin_media_dir: /media/
