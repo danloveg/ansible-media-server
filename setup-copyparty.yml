@@ -1,0 +1,22 @@
+- name: Set up copyparty
+  hosts: homeserver
+  become: true
+  gather_facts: true
+
+  tasks:
+    - name: Set up copyparty
+      ansible.builtin.include_role:
+        name: "copyparty-podman"
+      vars:
+        copyparty_timezone: "{{ timezone }}"
+        copyparty_user_id: "{{ podman_user_id }}"
+        copyparty_group_id: "{{ podman_group_id }}"
+
+        copyparty_port: "{{ copyparty.port }}"
+        copyparty_reverse_proxy: "{{ copyparty.reverse_proxy }}"
+        copyparty_config_dir: "{{ copyparty.config_dir }}"
+        copyparty_enable_sharing: "{{ copyparty.enable_sharing }}"
+        copyparty_share_web_path: "{{ copyparty.share_web_path }}"
+        copyparty_volumes: "{{ coparty.volumes }}"
+        copyparty_admin_username: "{{ v_copyparty_admin_username }}"
+        copyparty_admin_password: "{{ v_copyparty_admin_password }}"
