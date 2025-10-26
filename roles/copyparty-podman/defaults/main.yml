@@ -22,6 +22,9 @@ copyparty_share_dir: /share/
 copyparty_admin_username: "SECRET-REPLACE-ME"
 copyparty_admin_password: "SECRET-REPLACE-ME"
 
+# Optional server name
+# copyparty_server_name: "my-server"
+
 # List of directories you want to share via copyparty
 copyparty_volumes:
   - web_path: "/"

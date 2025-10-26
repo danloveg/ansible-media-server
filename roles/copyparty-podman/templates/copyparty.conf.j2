@@ -23,8 +23,12 @@
   # ver              # show copyparty version in the controlpanel
   # grid             # show thumbnails/grid-view by default
   # theme: 2         # monokai
-  # name: datasaver  # change the server-name that's displayed in the browser
   # stats, nos-dup   # enable the prometheus endpoint, but disable the dupes counter (too slow)
+
+  {% if copyparty_server_name is defined %}
+  # change the server-name that's displayed in the browser
+  name: {{ copyparty_server_name}}
+  {% endif %}
 
   df: 16               # stop accepting uploads if less than 16 GB free disk space
   no-robots, force-js  # make it harder for search engines to read your server
