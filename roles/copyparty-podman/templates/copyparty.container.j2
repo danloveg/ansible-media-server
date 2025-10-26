@@ -1,0 +1,45 @@
+[Unit]
+Description="File sharing server"
+
+[Container]
+Image=docker.io/copyparty/ac:1.19.19
+ContainerName=copyparty
+{% if copyparty_reverse_proxy %}
+Network=web-services.network
+{% endif %}
+
+User={{ copyparty_user_id }}
+Group={{ copyparty_group_id }}
+
+# Ports
+PublishPort={{ copyparty_port }}:3923
+
+# Environment variables
+Environment=TZ={{ copyparty_timezone }}
+Environment=LD_PRELOAD=/usr/lib/libmimalloc-secure.so.NOPE
+Environment=PYTHONUNBUFFERED=1
+
+# Volumes
+Volume={{ copyparty_config_dir }}:/cfg:z
+{% for volume in copyparty_volumes %}
+Volume={{ volume.host_path }}:{{ volume.container_path }}:z
+{% endfor %}
+
+# Give the container time to stop in case the thumbnailer is still running.
+# It's allowed to continue finishing up for 10s after the shutdown signal, give it a 5s buffer
+StopTimeout=15
+
+# hide it from logs with "/._" so it matches the default --lf-url filter
+HealthCmd="wget --spider -q http://copyparty:3923/?reset=/._"
+HealthInterval=1m
+HealthTimeout=2s
+HealthRetries=5
+HealthStartPeriod=15s
+
+[Install]
+# Start by default on boot
+WantedBy=default.target
+
+[Service]
+# Give the container time to start in case it needs to pull the image
+TimeoutStartSec=600

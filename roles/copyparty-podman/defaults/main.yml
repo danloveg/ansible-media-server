@@ -1,0 +1,21 @@
+copyparty_timezone: America/Winnipeg
+copyparty_user_id: 1000
+copyparty_group_id: 1000
+
+# Port exposed from container (not the port copyparty listens on in the container)
+copyparty_port: 3923
+
+# Set to true to reverse proxy
+copyparty_reverse_proxy: false
+
+# Set to actual domain if reverse proxying (without https://)
+copyparty_domain: localhost
+
+# Where copyparty config files will be stored on the host (not in the container)
+copyparty_config_dir: /opt/copyparty/config
+
+# List of directories you want to share via copyparty
+copyparty_volumes:
+  - web_path: "/"
+    container_path: "/w"
+    host_path: "/media/"
