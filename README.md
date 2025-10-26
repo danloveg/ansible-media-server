@@ -110,7 +110,11 @@ All encrypted variables are given a `v_` prefix. Deploying some services require
 
 If you're using VSCode, install recommended extensions by searching for `@recommended` in the extensions search box and install all the extensions listed there.
 
-## Playbook: setup-podman-user.yml
+## Playbook: setup-common.yml
+
+**This playbook should be run first to prep the server for later playbooks.**
+
+The main purpose of this playbook is to create a non-root user for running containers. It also runs other one-time setup tasks that other playbooks will depend on having been executed.
 
 The `podman` user is used extensively to provide a non-root user for storing configuration files and for running containers as a non-root user.
 

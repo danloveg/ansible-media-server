@@ -4,19 +4,13 @@
   gather_facts: true
 
   tasks:
-    # Later install packages tasks won't work without this on RedHat
-    - name: Install python3-libdnf5
-      tags: packages
-      ansible.builtin.command: dnf install -y python3-libdnf5
-      when: ansible_os_family == 'RedHat'
-
     - name: Set up Caddy for reverse proxying services
       ansible.builtin.include_role:
         name: "caddy-podman"
       vars:
         caddy_timezone: "{{ timezone }}"
-        caddy_user_id: "{{ caddy.user_id }}"
-        caddy_group_id: "{{ caddy.user_id }}"
+        caddy_user_id: "{{ podman_user_id }}"
+        caddy_group_id: "{{ podman_group_id }}"
         caddy_host_ip_is_static: "{{ caddy.host_ip_is_static }}"
         # Secrets in group_vars/all/vault.yml
         caddy_cloudflare_api_token: "{{ v_caddy_cloudflare_api_token }}"
