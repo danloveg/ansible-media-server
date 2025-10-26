@@ -1,5 +1,19 @@
+starrapps_timezone: America/Winnipeg
+starrapps_user_id: 1000
+starrapps_group_id: 1000
+
+# Jellyseerr configuration
 starrapps_jellyseerr_port: 5055
-starrapps_radarr_por: 7878
-starrapps_sabnznd_port: 8080
-starrapps_sonarr_port: 8989
+starrapps_jellyseer_config_dir: /opt/jellyseerr/config/
+
+# Prowlarr configuration
 starrapps_prowlarr_port: 9696
+
+# Radarr configuration
+starrapps_radarr_port: 7878
+
+# SABnzbd configuration
+starrapps_sabnznd_port: 8080
+
+# Sonarr configuration
+starrapps_sonarr_port: 8989
