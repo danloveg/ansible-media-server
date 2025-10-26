@@ -1,0 +1,92 @@
+---
+- name: Fail if reverse proxying and domain is localhost
+  ansible.builtin.fail:
+    msg: "You must set a domain name with copyparty_domain when reverse proxying copyparty"
+  when: copyparty_reverse_proxy and copyparty_domain == "localhost"
+
+- name: "Ensure packages are installed"
+  tags: packages
+  become: true
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - podman
+    - python3-firewall
+  loop_control:
+    label: "Install {{ item }}"
+
+- name: Expose copyparty port through firewall
+  tags: firewall
+  become: true
+  ansible.posix.firewalld:
+    permanent: true
+    immediate: true
+    port: "{{ copyparty_port }}/tcp"
+    state: enabled
+    zone: public
+
+- name: Create config directory
+  tags: config
+  become: true
+  ansible.builtin.file:
+    path: "{{ copyparty_config_dir }}"
+    state: directory
+    owner: podman
+    group: podman
+    mode: '0755'
+
+- name: Create shared directories
+  tags: config
+  become: true
+  ansible.builtin.file:
+    path: "{{ item.host_path }}"
+    state: directory
+    owner: podman
+    group: podman
+    mode: '0755'
+  loop: "{{ copyparty_volumes }}"
+
+- name: Deploy copyparty config
+  tags: config
+  become: true
+  ansible.builtin.template:
+    src: copyparty.conf.j2
+    dest: "{{ copyparty_config_dir }}/copyparty.conf"
+    owner: podman
+    group: podman
+    mode: '0644'
+  notify: Restart copyparty
+
+- name: Create container systemd unit file directory
+  tags: container
+  become: true
+  ansible.builtin.file:
+    path: "/etc/containers/systemd"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Deploy shared web-services network definition
+  tags: container
+  become: true
+  ansible.builtin.copy:
+    src: web-services.network  # file comes from common role
+    dest: /etc/containers/systemd/web-services.network
+    owner: root
+    group: root
+    mode: '0644'
+  when: copyparty_reverse_proxy
+  notify: Restart copyparty
+
+- name: Deploy copyparty container definition
+  tags: container
+  become: true
+  ansible.builtin.template:
+    src: copyparty.container.j2
+    dest: /etc/containers/systemd/copyparty.container
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Restart copyparty

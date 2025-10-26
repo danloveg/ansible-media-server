@@ -16,7 +16,7 @@ copyparty_config_dir: /opt/copyparty/config
 
 # Enable sharing, and set the path on the web server where files are shared
 copyparty_enable_sharing: true
-copyparty_share_dir: /share/
+copyparty_share_web_path: /share/
 
 # These secrets are always required
 copyparty_admin_username: "SECRET-REPLACE-ME"

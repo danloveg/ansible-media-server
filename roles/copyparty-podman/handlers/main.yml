@@ -1,0 +1,7 @@
+---
+- name: Restart copyparty
+  become: true
+  ansible.builtin.systemd_service:
+    daemon_reload: true
+    name: copyparty
+    state: restarted  # this works even if deploying the services for the first time
