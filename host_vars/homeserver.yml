@@ -44,3 +44,9 @@ copyparty:
     - web_path: /
       container_path: /w
       host_path: /data/
+
+jellyfin:
+  port: 8096
+  reverse_proxy: true
+  config_dir: /opt/jellyfin/config/
+  media_dir: /data/media/

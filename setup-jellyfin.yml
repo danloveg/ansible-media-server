@@ -1,0 +1,19 @@
+- name: Set up jellyfin
+  hosts: homeserver
+  become: true
+  gather_facts: true
+
+  tasks:
+    - name: Set up jellyfin
+      ansible.builtin.include_role:
+        name: "jellyfin-podman"
+      vars:
+        jellyfin_timezone: "{{ timezone }}"
+        jellyfin_user_id: "{{ podman_user_id }}"
+        jellyfin_group_id: "{{ podman_group_id }}"
+
+        jellyfin_port: "{{ jellyfin.port }}"
+        jellyfin_reverse_proxy: "{{ jellyfin.reverse_proxy }}"
+        jellyfin_config_dir: "{{ jellyfin.config_dir }}"
+        jellyfin_media_dir: "{{ jellyfin.media_dir }}"
+        jellyfin_domain: "{{ v_jellyfin_domain }}"
