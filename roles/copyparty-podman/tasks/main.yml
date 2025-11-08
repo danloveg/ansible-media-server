@@ -52,7 +52,7 @@
   tags: container
   become: true
   ansible.builtin.copy:
-    src: web-services.network  # file comes from common role
+    src: common/web-services.network
     dest: /etc/containers/systemd/web-services.network
     owner: root
     group: root
@@ -70,3 +70,7 @@
     group: root
     mode: '0644'
   notify: Restart copyparty
+
+- name: Service info
+  ansible.builtin.debug:
+    msg: Copyparty will be available on port {{ copyparty_port }}
