@@ -17,6 +17,6 @@
         copyparty_config_dir: "{{ copyparty.config_dir }}"
         copyparty_enable_sharing: "{{ copyparty.enable_sharing }}"
         copyparty_share_web_path: "{{ copyparty.share_web_path }}"
-        copyparty_volumes: "{{ coparty.volumes }}"
+        copyparty_volumes: "{{ copyparty.volumes }}"
         copyparty_admin_username: "{{ v_copyparty_admin_username }}"
         copyparty_admin_password: "{{ v_copyparty_admin_password }}"
