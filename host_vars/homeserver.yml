@@ -31,7 +31,7 @@ caddy:
           32373936323734653461636138333533383433356139313137376338323132303064613863363734
           3431356133316464300a333537393137383438643933356237386538643833336533663132346132
           39323739383861333932653665333932633535363130663461626237323031346264
-      container_name: jellyseerr
+      container_name: starrapps  # <- Use the name of the pod, not the container in the pod
       port: 5055
 
 copyparty:
@@ -50,3 +50,13 @@ jellyfin:
   reverse_proxy: true
   config_dir: /opt/jellyfin/config/
   media_dir: /data/media/
+
+starrapps:
+  media_root_dir: /data/
+  media_usenet_dir: /data/usenet/
+  jellyseerr_reverse_proxy: true
+  jellyseerr_port: 5055
+  prowlarr_config_dir: /opt/prowlarr/
+  radarr_config_dir: /opt/radarr/
+  sabnzbd_config_dir: /opt/sabnzbd/
+  sonarr_config_dir: /opt/sonarr/

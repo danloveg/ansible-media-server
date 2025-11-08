@@ -49,7 +49,7 @@
   tags: container
   become: true
   ansible.builtin.copy:
-    src: web-services.network  # file comes from common role
+    src: common/web-services.network
     dest: /etc/containers/systemd/web-services.network
     owner: root
     group: root
@@ -122,3 +122,12 @@
     group: root
     mode: '0644'
   notify: Restart starrapps-pod
+
+- name: Service info
+  ansible.builtin.debug:
+    msg:
+      - Jellyseerr will be available on port {{ starrapps_jellyseerr_port }}
+      - Prowlarr will be available on port {{ starrapps_prowlarr_port }}
+      - Radarr will be available on port {{ starrapps_radarr_port }}
+      - SABnzbd will be available on port {{ starrapps_sabnznd_port }}
+      - Sonarr will be available on port {{ starrapps_sonarr_port }}

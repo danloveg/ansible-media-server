@@ -1,0 +1,21 @@
+- name: Set up *arr apps
+  hosts: homeserver
+  become: true
+  gather_facts: true
+
+  tasks:
+    - name: Set up *arr apps
+      ansible.builtin.include_role:
+        name: "starrapps-podman"
+      vars:
+        starrapps_timezone: "{{ timezone }}"
+        starrapps_user_id: "{{ podman_user_id }}"
+        starrapps_group_id: "{{ podman_group_id }}"
+        starrapps_media_root_dir: "{{ starrapps.media_root_dir }}"
+        starrapps_media_usenet_dir: "{{ starrapps.media_usenet_dir }}"
+        starrapps_jellyseerr_reverse_proxy: "{{ starrapps.jellyseerr_reverse_proxy }}"
+        starrapps_jellyseerr_port: "{{ starrapps.jellyseerr_port }}"
+        starrapps_prowlarr_config_dir: "{{ starrapps.prowlarr_config_dir }}"
+        starrapps_radarr_config_dir: "{{ starrapps.radarr_config_dir }}"
+        starrapps_sabnzbd_config_dir: "{{ starrapps.sabnzbd_config_dir }}"
+        starrapps_sonarr_config_dir: "{{ starrapps.sonarr_config_dir }}"
