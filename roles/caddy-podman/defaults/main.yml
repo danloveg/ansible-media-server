@@ -16,3 +16,5 @@ caddy_config_path: /opt/caddy/config
 
 # Override with hosts to proxy
 caddy_reverse_proxy_hosts: []
+
+caddy_cloudflare_script_dir: /opt/cloudflare/

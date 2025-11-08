@@ -111,6 +111,6 @@ if (( num_updated != 0 )); then
     log_info "Updated ${num_updated} DNS records"
 fi
 
-if (( num_errors == 0 && num_updated == 0 ));
+if (( num_errors == 0 && num_updated == 0 )); then
     log_info "Nothing to do!"
 fi

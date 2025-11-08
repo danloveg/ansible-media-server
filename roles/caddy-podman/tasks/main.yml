@@ -79,7 +79,7 @@
     - "80/tcp"
     - "443/tcp"
     - "443/udp"
-  when: caddy_reverse_proxy_hosts
+  when: caddy_reverse_proxy_hosts | list | length > 0
 
 - name: Deploy Caddyfile
   become: true
@@ -94,7 +94,7 @@
 - name: Deploy shared web-services network definition
   become: true
   ansible.builtin.copy:
-    src: web-services.network
+    src: common/web-services.network
     dest: /etc/containers/systemd/web-services.network
     owner: root
     group: root
