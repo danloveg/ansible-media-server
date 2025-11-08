@@ -12,6 +12,7 @@
         caddy_user_id: "{{ podman_user_id }}"
         caddy_group_id: "{{ podman_group_id }}"
         caddy_host_ip_is_static: "{{ caddy.host_ip_is_static }}"
+        caddy_reverse_proxy_hosts: "{{ caddy.reverse_proxy_hosts }}"
         # Secrets in group_vars/all/vault.yml
         caddy_cloudflare_api_token: "{{ v_caddy_cloudflare_api_token }}"
         caddy_cloudflare_zone_id: "{{ v_caddy_cloudflare_zone_id }}"
