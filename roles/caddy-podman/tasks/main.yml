@@ -154,3 +154,9 @@
     job: "{{ caddy_cloudflare_script_dir }}/update-ip.sh"
     user: root
   when: not caddy_host_ip_is_static
+
+- name: Show reverse proxied services
+  ansible.builtin.debug:
+    msg: "Reverse proxying {{ item.container_name }}:{{ item.port }} with domain https://{{ item.domain_name }}"
+  loop: "{{ caddy_reverse_proxy_hosts }}"
+  when: caddy_reverse_proxy_hosts | list | length > 0
