@@ -2,6 +2,9 @@ copyparty_timezone: America/Winnipeg
 copyparty_user_id: 1000
 copyparty_group_id: 1000
 
+# Site title
+copyparty_name: "copyparty!"
+
 # Port exposed from container (not the port copyparty listens on in the container)
 copyparty_port: 3923
 
