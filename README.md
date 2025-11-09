@@ -134,6 +134,58 @@ This variable needs to be set before running this playbook:
 | ---------------------- | ---------------------------------------------- | --------------- |
 | v_podman_user_password | The hashed value of the podman user's password | Always required |
 
+## Playbook: setup-copyparty.yml
+
+[Copyparty](https://github.com/9001/copyparty) is a file sharing server that supports a wide range of browsers and protocols.
+
+Copyparty can be installed with the `setup-copyparty.yml` playbook. You can optionally turn on reverse proxying for copyparty using the `copyparty_reverse_proxy` variable. This creates a shared network with the `caddy` container so that Caddy can access copyparty.
+
+To set up copyparty, run:
+
+```shell
+ansible-playbook -i inventory setup-copyparty.yml
+```
+
+### Volumes
+
+You can share parts of your server's file with copyparty by using the `copyparty_volumes` variables. This can be controlled by editing `copyparty.volumes` in the `host_vars/homeserver.yml` file.
+
+`volumes` is a list of objects with three attributes:
+
+- `web_path`: The path on the server that the files will be accessible at. Use `/` to see your files when you first log in to copyparty.
+- `container_path`: The path in the copyparty container that you want to mount your server's files at.
+- `host_path`: The local path on your server that contains the files you want to share
+
+This example creates two shares:
+
+1. The podman user's home directory, at `/`
+2. The `/data/media/` directory, at `/media/`
+
+```yaml
+copyparty:
+  volumes:
+    - web_path: /
+      container_path: /podman/
+      host_path: /home/podman/
+
+    - web_path: /media/
+      container_path: /media/
+      host_path: /data/media/
+```
+
+### Sharing
+
+You can enable file sharing with the `copyparty_enable_sharing` variable. If this is set to `true`, you can define a path with `copyparty_share_web_path` where [shares](https://github.com/9001/copyparty?tab=readme-ov-file#shares) will be accessible from. The files you share don't get copied or moved, so there's no need to specify where on your host the files are shared from.
+
+### Secret Variables
+
+These variables need to be set before running this playbook:
+
+| Name                       | Description                                      | Requirement     |
+| -------------------------- | ------------------------------------------------ | --------------- |
+| v_copyparty_admin_username | The admin username                               | Always required |
+| v_copyparty_admin_password | A plaintext password used to log in as the admin | Always required |
+
 ## Playbook: setup-caddy.yml
 
 Caddy is used to reverse proxy the services on the media server so that they can be served over HTTPS on the web.
@@ -159,7 +211,7 @@ caddy:
       port: the_other_exposed_port
 ```
 
-Any container or pod that uses the `web-services.network` can be reverse proxied by Caddy.
+Any container or pod that uses the `web-services.network` can be reverse proxied by Caddy. If you want to reverse proxy a service in a Pod, you should reference the name of the pod with the `container_name`, not the name of the service inside the pod.
 
 If your host does not have a static IP (e.g., if your ISP does not allow it), there is an included script that is deployed that will update the IPv4 address of your domains to the host's IP address whenever it changes. To enable this feature, set:
 
