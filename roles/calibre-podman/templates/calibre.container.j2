@@ -1,0 +1,34 @@
+# https://hub.docker.com/r/linuxserver/calibre
+
+[Unit]
+Description="eBook library (GUI desktop application)"
+
+[Container]
+Image=lscr.io/linuxserver/calibre:8.15.0
+ContainerName=calibre-gui
+Pod=calibre.pod
+
+# Devices
+AddDevice=/dev/dri/
+
+# Environment variables
+Environment=PUID={{ calibre_user_id }}
+Environment=PGID={{ calibre_group_id }}
+Environment=TZ={{ calibre_timezone }}
+Environment=CUSTOM_PORT={{ calibre_http_port }}
+Environment=CUSTOM_HTTPS_PORT={{ calibre_https_port }}
+Environment=CUSTOM_WS_PORT={{ calibre_ws_port }}
+{% if calibre_password is defined %}
+Environment=PASSWORD={{ calibre_password }}
+{% endif %}
+
+# Volumes
+Volume={{ calibre_config_dir }}:/config:z
+Volume={{ calibre_books_dir }}:/books:z
+
+[Service]
+TimeoutStartSec=900
+
+[Install]
+# Start by default on boot
+WantedBy=default.target

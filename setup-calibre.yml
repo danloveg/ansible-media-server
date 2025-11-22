@@ -1,0 +1,17 @@
+- name: Set up calibre
+  hosts: homeserver
+  become: true
+  gather_facts: true
+
+  tasks:
+    - name: Set up callibre
+      ansible.builtin.include_role:
+        name: "calibre-podman"
+      vars:
+        calibre_timezone: "{{ timezone }}"
+        calibre_user_id: "{{ podman_user_id }}"
+        calibre_group_id: "{{ podman_group_id }}"
+        calibre_https_port: "{{ calibre.gui_port }}"
+        calibre_config_dir: "{{ calibre.config_dir }}"
+        calibre_books_dir: "{{ calibre.books_dir }}"
+        calibre_password: "{{ v_calibre_password }}"

@@ -1,0 +1,76 @@
+---
+# Always required
+- name: Fail if password is not set
+  ansible.builtin.fail:
+    msg: "You must replace the calibre_password with a secure password."
+  when: calibre_password == "SECRET-REPLACE-ME"
+
+- name: Install podman
+  tags: packages
+  become: true
+  ansible.builtin.package:
+    name: podman
+    state: present
+
+- name: Create config directories
+  tags: config
+  become: true
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: podman
+    group: podman
+    mode: '0755'
+  loop:
+    - "{{ calibre_config_dir }}"
+    - "{{ calibre_books_dir }}"
+
+- name: Create container systemd unit file directory
+  tags: container
+  become: true
+  ansible.builtin.file:
+    path: "/etc/containers/systemd"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Deploy shared web-services network definition
+  tags: container
+  become: true
+  ansible.builtin.copy:
+    src: common/web-services.network
+    dest: /etc/containers/systemd/web-services.network
+    owner: root
+    group: root
+    mode: '0644'
+  when: calibre_web_reverse_proxy
+  notify: Restart calibre-pod
+
+- name: Deploy pod definition for calibre services
+  tags: container
+  become: true
+  ansible.builtin.template:
+    src: calibre.pod.j2
+    dest: /etc/containers/systemd/calibre.pod
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Restart calibre-pod
+
+- name: Deploy calibre container definition
+  tags: container
+  become: true
+  ansible.builtin.template:
+    src: calibre.container.j2
+    dest: /etc/containers/systemd/calibre.container
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Restart calibre-pod
+
+- name: Service info
+  ansible.builtin.debug:
+    msg:
+      - Calibre desktop GUI will be available on port {{ calibre_https_port }}
+      - Calibre Web UI is not implemented yet!

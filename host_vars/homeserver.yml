@@ -34,6 +34,12 @@ caddy:
       container_name: starrapps  # <- Use the name of the pod, not the container in the pod
       port: 5055
 
+calibre:
+  gui_port: 8181
+  config_dir: /opt/calibre/config/
+  books_dir: /data/media/Books/
+  web_reverse_proxy: false
+
 copyparty:
   port: 3923
   reverse_proxy: true

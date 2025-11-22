@@ -1,0 +1,17 @@
+[Unit]
+Description="Calibre eBook library with GUI and web interface"
+
+[Pod]
+PodName=calibre
+PublishPort={{ calibre_https_port }}:{{ calibre_https_port }}
+
+{% if calibre_web_reverse_proxy %}
+Network=web-services.network
+{% endif %}
+
+[Service]
+Restart=unless-stopped
+
+[Install]
+# Start by default on boot
+WantedBy=default.target
