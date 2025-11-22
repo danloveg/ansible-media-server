@@ -3,7 +3,8 @@ Description="Calibre eBook library with GUI and web interface"
 
 [Pod]
 PodName=calibre
-PublishPort={{ calibre_https_port }}:{{ calibre_https_port }}
+PublishPort={{ calibre_gui_port }}:8181
+PublishPort={{ calibre_web_port }}:8083
 
 {% if calibre_web_reverse_proxy %}
 Network=web-services.network

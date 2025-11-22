@@ -36,7 +36,10 @@ caddy:
 
 calibre:
   gui_port: 8181
+  web_port: 8083
   config_dir: /opt/calibre/config/
+  web_config_dir: /opt/calibre-web/config/
+  web_library_dir: /opt/calibre/config/MyLibrary/
   books_dir: /data/media/Books/
   web_reverse_proxy: false
 

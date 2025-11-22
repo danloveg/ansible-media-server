@@ -1,0 +1,23 @@
+# https://hub.docker.com/r/linuxserver/calibre-web
+
+[Unit]
+Description="eBook reader (web application)"
+
+[Container]
+Image=lscr.io/linuxserver/calibre-web:0.6.25
+ContainerName=calibre-web
+Pod=calibre.pod
+
+# Environment variables
+Environment=PUID={{ calibre_user_id }}
+Environment=PGID={{ calibre_group_id }}
+Environment=TZ={{ calibre_timezone }}
+# Adds the ability to perform ebook conversion
+Environment=DOCKER_MODS=linuxserver/mods:universal-calibre
+
+# Volumes
+Volume={{ calibre_web_config_dir }}:/config:z
+Volume={{ calibre_web_library_dir }}:/books:z
+
+[Service]
+TimeoutStartSec=900

@@ -23,6 +23,8 @@
     mode: '0755'
   loop:
     - "{{ calibre_config_dir }}"
+    - "{{ calibre_web_config_dir }}"
+    - "{{ calibre_web_library_dir }}"
     - "{{ calibre_books_dir }}"
 
 - name: Create container systemd unit file directory
@@ -69,8 +71,19 @@
     mode: '0644'
   notify: Restart calibre-pod
 
+- name: Deploy calibre-web container definition
+  tags: container
+  become: true
+  ansible.builtin.template:
+    src: calibre-web.container.j2
+    dest: /etc/containers/systemd/calibre-web.container
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Restart calibre-pod
+
 - name: Service info
   ansible.builtin.debug:
     msg:
-      - Calibre desktop GUI will be available on port {{ calibre_https_port }}
-      - Calibre Web UI is not implemented yet!
+      - Calibre desktop GUI will be available on port {{ calibre_gui_port }}
+      - Calibre Web UI will be available on port {{ calibre_web_port }}

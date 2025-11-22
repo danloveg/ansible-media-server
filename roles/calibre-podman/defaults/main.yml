@@ -2,15 +2,14 @@ calibre_timezone: America/Winnipeg
 calibre_user_id: 1000
 calibre_group_id: 1000
 
-# https://docs.linuxserver.io/images/docker-calibre/#ports-p
-calibre_http_port: 8080
-calibre_ws_port: 8081
 # This port is exposed from the pod and is used to connect to the desktop GUI
-calibre_https_port: 8181
+calibre_gui_port: 8181
 
 calibre_config_dir: /opt/calibre/config/
+calibre_web_config_dir: /opt/calibre-web/config/
+calibre_web_library_dir: /opt/calibre/config/Library/
 
-# A place to upload books to so they appear in the container
+# A place to upload books to so they appear in the calibre GUI container
 calibre_books_dir: /data/media/Books/
 
 # This secret is always required
