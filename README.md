@@ -179,12 +179,34 @@ You can enable file sharing with the `copyparty_enable_sharing` variable. If thi
 
 ### Secret Variables
 
-These variables need to be set before running this playbook:
+The following table outlines the secret variables that may need to be set for this playbook to work.
 
 | Name                       | Description                                      | Requirement     |
 | -------------------------- | ------------------------------------------------ | --------------- |
 | v_copyparty_admin_username | The admin username                               | Always required |
 | v_copyparty_admin_password | A plaintext password used to log in as the admin | Always required |
+
+## Playbook: setup-jellyfin.yml
+
+[Jellyfin](https://github.com/jellyfin/jellyfin) is an open source media server.
+
+Jellyfin can be installed with the `setup-jellyfin.yml` playbook. You can optionally turn on reverse proxying for Jellyfin using the `jellyfin_reverse_proxy` variable. This creates a shared network with the caddy container so that Caddy can access Jellyfin.
+
+To set up Jellyfin, run:
+
+```shell
+ansible-playbook -i inventory setup-jellyfin.yml
+```
+
+There are sane defaults set for Jellyfin so you shouldn't need to tweak them ([see defaults here](roles/jellyfin-podman/defaults/main.yml)). One variable you *might* want to tweak is the location of the media library on your localhost. That is controlled with the `jellyfin_media_dir` variable. But be aware that this directory must be within the the `starrapps_media_dir` if you are running the starrapps (see playbook below).
+
+### Secret Variables
+
+The following table outlines the secret variables that may need to be set for this playbook to work.
+
+| Name                       | Description                                       | Requirement           |
+| -------------------------- | ------------------------------------------------- | --------------------- |
+| v_jellyfin_domain          | The domain where your Jellyfin instance is served | When reverse proxying |
 
 ## Playbook: setup-caddy.yml
 
@@ -226,7 +248,7 @@ Note that you will need to enable port forwarding for ports 80/tcp, 443/tcp, and
 
 ### Secret Variables
 
-These variable needs to be set before running this playbook:
+The following table outlines the secret variables that may need to be set for this playbook to work.
 
 | Name                         | Description                                                  | Requirement                |
 | ---------------------------- | ------------------------------------------------------------ | -------------------------- |
