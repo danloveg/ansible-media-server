@@ -10,7 +10,7 @@ calibre_web_config_dir: /opt/calibre-web/config/
 calibre_web_library_dir: /opt/calibre/config/Library/
 
 # A place to upload books to so they appear in the calibre GUI container
-calibre_books_dir: /data/media/Books/
+calibre_upload_dir: /data/media/upload/books/
 
 # This secret is always required
 calibre_password: "SECRET-REPLACE-ME"

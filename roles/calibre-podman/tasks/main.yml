@@ -23,9 +23,9 @@
     mode: '0755'
   loop:
     - "{{ calibre_config_dir }}"
+    - "{{ calibre_upload_dir }}"
     - "{{ calibre_web_config_dir }}"
     - "{{ calibre_web_library_dir }}"
-    - "{{ calibre_books_dir }}"
 
 - name: Create container systemd unit file directory
   tags: container

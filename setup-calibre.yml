@@ -17,5 +17,5 @@
         calibre_config_dir: "{{ calibre.config_dir }}"
         calibre_web_config_dir: "{{ calibre.web_config_dir }}"
         calibre_web_library_dir: "{{ calibre.web_library_dir }}"
-        calibre_books_dir: "{{ calibre.books_dir }}"
+        calibre_upload_dir: "{{ calibre.upload_dir }}"
         calibre_password: "{{ v_calibre_password }}"

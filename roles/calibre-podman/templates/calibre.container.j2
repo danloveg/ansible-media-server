@@ -21,7 +21,7 @@ Environment=PASSWORD={{ calibre_password }}
 
 # Volumes
 Volume={{ calibre_config_dir }}:/config:z
-Volume={{ calibre_books_dir }}:/books:z
+Volume={{ calibre_upload_dir }}:/books:z
 
 [Service]
 TimeoutStartSec=900

@@ -49,7 +49,7 @@ calibre:
   config_dir: /opt/calibre/config/
   web_config_dir: /opt/calibre-web/config/
   web_library_dir: /opt/calibre/config/MyLibrary/
-  books_dir: /data/media/CalibreBooks/
+  upload_dir: /data/media/upload/books/
   web_reverse_proxy: true
 
 copyparty:
