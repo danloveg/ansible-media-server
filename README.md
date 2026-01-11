@@ -186,6 +186,60 @@ The following table outlines the secret variables that may need to be set for th
 | v_copyparty_admin_username | The admin username                               | Always required |
 | v_copyparty_admin_password | A plaintext password used to log in as the admin | Always required |
 
+## Playbook: setup-calibre.yml
+
+[Calibre](https://github.com/kovidgoyal/calibre/) is an open-source e-book manager. Calibre is a desktop GUI application, but can be accessed over the web using this setup. [Calibre Web](https://github.com/janeczku/calibre-web) is a web optimized interface that enables you to access an existing Calibre library.
+
+Images used:
+
+- [lscr.io/linuxserver/calibre](https://docs.linuxserver.io/images/docker-calibre/)
+- [lscr.io/linuxserver/calibre-web](https://docs.linuxserver.io/images/docker-calibre-web/)
+
+Calibre and Calibre Web can be installed with the `setup-calibre.yml` playbook. You can optionally turn on reverse proxying for Calibre Web using the `calibre_web_reverse_proxy` variable. This creates a shared network with the caddy container so that Caddy can access Calibre Web. Note that, when reverse proxying Calibre, only the Calibre Web interface is exposed. The desktop GUI interface can only be accessed locally.
+
+To set up Calibre, run:
+
+```shell
+ansible-playbook -i inventory setup-calibre.yml
+```
+
+After installing, ensure you follow these steps to set up your library:
+
+- [Calibre application setup](https://docs.linuxserver.io/images/docker-calibre/#application-setup). You don't necessarily need to enable Calibre's web server since we have calibre-web for that.
+- [Calibre Web application setup](https://docs.linuxserver.io/images/docker-calibre-web/#application-setup)
+
+**NOTE:** If you're reverse proxying Calibre Web, you might notice an issue with having to log in over and over again. To fix that, follow the steps in [this comment](https://github.com/janeczku/calibre-web/issues/2422#issuecomment-1817122953). You need to set the security configuration to "Basic" by going to **Admin** > **Edit Basic Configuration** > **Security Settings** > **Session Protection** to fix this issue.
+
+There are sane defaults set for Calibre so you shouldn't need to tweak them ([see defaults here](roles/calibre-podman/defaults/main.yml)). One variable you *might* want to tweak is the location of the upload directory. This directory is where you can upload books so that they appear in the Calibre GUI file explorer, *not* where books are stored. That is controlled with the `calibre_upload_dir` variable.
+
+### Using the GUI
+
+Since Calibre is a GUI application, there are quirks with accessing it via a web interface. Here are some tips to use it:
+
+- There are two way to upload files so that you can add new books. The first way is to copy them to your server at `/data/media/upload/books/` (or wherever you set `calibre_upload_dir`). These uploads can be accessed at the `/books/` directory when you click **Add books** in Calibre.
+  - Tip: You might use Copyparty to upload files to this location.
+- Alternately, use the Selkies Dashboard to upload files via a web uploader. To open the dashboard, click the light blue button on the left side of the screen and find the **Files** section. Files uploaded in this way get uploaded to `/config/Desktop`. This path can be configured using the `FILE_MANAGER_PATH` environment variable.
+
+![Upload files via the Selkies dashboard](img/selkies-dashboard-upload-files.png)
+
+- To paste from your clipboard into the web interface, you must use the **Clipboard** section in the Selkies Dashboard. The content you want to paste should be placed in the **Server Clipboard** text input.
+
+![Paste to clipboard via the Selkies dashboard](img/selkies-dashboard-clipboard.png)
+
+- If you experience performance issues (i.e., low frame rate) in your browser, you can try one of two things. You can choose a hardware render node that support VAAPI with the `calibre_vaapi_render_node`, or you can set the **Encoder** to **jpeg** in the Selkies **Video settings**. I've not been able to get the hardware encoding working, but the **jpeg** renderer is a lot quicker on my hardware (with worse image quality).
+
+![Choose encoder via the Selkies dashboard](img/selkies-dashboard-video-settings.png)
+
+### Secret Variables
+
+The following table outlines the secret variables that may need to be set for this playbook to work.
+
+| Name                       | Description                                       | Requirement           |
+| -------------------------- | ------------------------------------------------- | --------------------- |
+| v_calibre_password         | The password to access the desktoip GUI           | Always required       |
+
+You might notice there is no setup for the calibre-web username and password. Those can only be configured through the application itself.
+
 ## Playbook: setup-jellyfin.yml
 
 [Jellyfin](https://github.com/jellyfin/jellyfin) is an open source media server.
