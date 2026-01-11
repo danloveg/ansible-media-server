@@ -33,6 +33,15 @@ caddy:
           39323739383861333932653665333932633535363130663461626237323031346264
       container_name: starrapps  # <- Use the name of the pod, not the container in the pod
       port: 5055
+    - domain_name: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          61373163376334363839313763333462616264353035636435376663623130386266353632356636
+          3065306364316665353332663834323239376230373566610a363364663661636338633561393030
+          64643539616131643135643362623039366364376235653731663832373666373461376436333166
+          3631323831353164660a393831663830356664646333343963636664643434663937663062363334
+          34393533386533366130323638316537353362616232376439656661396636373563
+      container_name: calibre  # <- Use the name of the pod, not the container in the pod
+      port: 8083
 
 calibre:
   gui_port: 8181
@@ -40,8 +49,8 @@ calibre:
   config_dir: /opt/calibre/config/
   web_config_dir: /opt/calibre-web/config/
   web_library_dir: /opt/calibre/config/MyLibrary/
-  books_dir: /data/media/Books/
-  web_reverse_proxy: false
+  books_dir: /data/media/CalibreBooks/
+  web_reverse_proxy: true
 
 copyparty:
   port: 3923

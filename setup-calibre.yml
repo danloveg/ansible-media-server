@@ -13,6 +13,7 @@
         calibre_group_id: "{{ podman_group_id }}"
         calibre_gui_port: "{{ calibre.gui_port }}"
         calibre_web_port: "{{ calibre.web_port }}"
+        calibre_web_reverse_proxy: "{{ calibre.web_reverse_proxy }}"
         calibre_config_dir: "{{ calibre.config_dir }}"
         calibre_web_config_dir: "{{ calibre.web_config_dir }}"
         calibre_web_library_dir: "{{ calibre.web_library_dir }}"
