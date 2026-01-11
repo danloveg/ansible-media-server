@@ -15,6 +15,7 @@
   {% if copyparty_reverse_proxy %}
   # Make sure IP is detected properly with cloudflare header
   rproxy: 1
+  xff-src: lan
   xff-hdr: cf-connecting-ip
   {% endif %}
 
