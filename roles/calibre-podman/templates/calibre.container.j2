@@ -8,8 +8,10 @@ Image=lscr.io/linuxserver/calibre:8.16.2
 ContainerName=calibre-gui
 Pod=calibre.pod
 
+{% if calibre_vaapi_render_node is defined %}
 # Devices
-AddDevice=/dev/dri/
+AddDevice={{ calibre_vaapi_render_node }}
+{% endif %}
 
 # Environment variables
 Environment=PUID={{ calibre_user_id }}
@@ -17,6 +19,9 @@ Environment=PGID={{ calibre_group_id }}
 Environment=TZ={{ calibre_timezone }}
 {% if calibre_password is defined %}
 Environment=PASSWORD={{ calibre_password }}
+{% endif %}
+{% if calibre_vaapi_render_node is defined %}
+Environment=DRI_NODE={{ calibre_vaapi_render_node }}
 {% endif %}
 
 # Volumes

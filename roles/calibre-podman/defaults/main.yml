@@ -12,6 +12,9 @@ calibre_web_library_dir: /opt/calibre/config/Library/
 # A place to upload books to so they appear in the calibre GUI container
 calibre_upload_dir: /data/media/upload/books/
 
+# Use this variable to set the VAAPI render node for hardware video rendering
+# calibre_vaapi_render_node: /dev/dri/renderD128
+
 # This secret is always required
 calibre_password: "SECRET-REPLACE-ME"
 
