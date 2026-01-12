@@ -37,6 +37,14 @@
     group: root
     mode: '0755'
 
+- name: Create secret for calibre_password
+  tags: container
+  containers.podman.podman_secret:
+    state: present
+    name: calibre_password
+    data: "{{ calibre_password }}"
+  notify: Restart calibre-pod
+
 - name: Deploy shared web-services network definition
   tags: container
   become: true

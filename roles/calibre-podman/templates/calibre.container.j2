@@ -17,12 +17,12 @@ AddDevice={{ calibre_vaapi_render_node }}
 Environment=PUID={{ calibre_user_id }}
 Environment=PGID={{ calibre_group_id }}
 Environment=TZ={{ calibre_timezone }}
-{% if calibre_password is defined %}
-Environment=PASSWORD={{ calibre_password }}
-{% endif %}
 {% if calibre_vaapi_render_node is defined %}
 Environment=DRI_NODE={{ calibre_vaapi_render_node }}
 {% endif %}
+
+# Secrets
+Secret=calibre_password,type=env,target=PASSWORD
 
 # Volumes
 Volume={{ calibre_config_dir }}:/config:z
