@@ -7,7 +7,7 @@ The playbooks in this media server can be used to set up:
 - [copyparty](https://github.com/9001/copyparty) for sharing and uploading files.
 - [Jellyfin](https://jellyfin.org/) for viewing media.
 - [Calibre](https://calibre-ebook.com/) and [calibre-web](https://github.com/janeczku/calibre-web) for uploading and reading books.
-- A set of \*arr apps I use, including Radarr, Sonarr, Prowlarr, SABnzbd, and Jellyseerr.
+- A set of \*arr apps I use, including Radarr, Sonarr, Prowlarr, SABnzbd, and Seerr.
 - [Caddy](https://caddyserver.com/) for reverse proxying services so they're available on the web.
 
 *All* deployed services using these playbooks are run in containers using Podman.
@@ -93,6 +93,13 @@ ansible all -m command -a "uptime" -i inventory
 ## Secrets
 
 It's recommended to store API tokens and other secret variables in an Ansible vault. If you create an Ansible vault at `group_vars/all/vault.yml`, Ansible will pick them up automatically. You can store the password to the vault anywhere outside of this repository, but I store it in a file called `~/.ansible_vault_password`.
+
+You can create the vault file with:
+
+```shell
+mkdir -p group_vars/all/
+ansible-vault create group_vars/all/vault.yml
+```
 
 You can edit the variables in the encrypted file with:
 
