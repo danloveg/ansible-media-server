@@ -1,0 +1,14 @@
+- name: Set up Cloudflare Tunnel
+  hosts: homeserver
+  become: true
+  gather_facts: true
+
+  tasks:
+    - name: Set up cloudflared
+      ansible.builtin.include_role:
+        name: "cloudflared-podman"
+      vars:
+        cloudflared_timezone: "{{ timezone }}"
+        cloudflared_user_id: "{{ podman_user_id }}"
+        cloudflared_group_id: "{{ podman_group_id }}"
+        cloudflared_tunnel_token: "{{ v_cloudflared_tunnel_token }}"

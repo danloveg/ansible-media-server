@@ -1,0 +1,5 @@
+cloudflared_tunnel_token: "SECRET-REPLACE-ME"
+
+cloudflared_timezone: America/Winnipeg
+cloudflared_user_id: 1000
+cloudflared_group_id: 1000

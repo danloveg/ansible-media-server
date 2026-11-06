@@ -1,0 +1,27 @@
+[Unit]
+Description="Cloudflare Zero Trust Tunnel"
+After=network-online.target
+
+[Container]
+Image=docker.io/cloudflare/cloudflared:2026.10.7
+Name=cloudflared
+Exec=tunnel --no-autoupdate run
+
+# Shared network with other pods/containers
+Network=web-services.network
+
+# Environment variables
+Environment=TZ={{ cloudflared_timezone }}
+Environment=TUNNEL_TOKEN={{ cloudflared_tunnel_token }}
+
+# Hardens the container by dropping unnecessary root privileges
+SecurityLabelDisable=true
+DropCapability=all
+
+[Service]
+Restart=always
+RestartSec=5
+TimeoutStartSec=900
+
+[Install]
+WantedBy=default.target

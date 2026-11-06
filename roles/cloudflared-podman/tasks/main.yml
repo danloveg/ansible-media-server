@@ -1,0 +1,47 @@
+---
+# Always required
+- name: Fail if Cloudflare tunnel token is not set
+  ansible.builtin.fail:
+    msg: "You must replace the caddy_cloudflare_tunnel_token with a real API token."
+  when: cloudflared_tunnel_token == "SECRET-REPLACE-ME"
+
+- name: Install required packages
+  tags: packages
+  become: true
+  ansible.builtin.package:
+    name: podman
+    state: present
+
+- name: Create container systemd unit file directory
+  become: true
+  ansible.builtin.file:
+    path: "/etc/containers/systemd"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Deploy shared web-services network definition
+  become: true
+  ansible.builtin.copy:
+    src: common/web-services.network
+    dest: /etc/containers/systemd/web-services.network
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart cloudflared
+
+- name: Deploy cloudflared container definition
+  tags: dns
+  become: true
+  ansible.builtin.template:
+    src: cloudflared.container.j2
+    dest: /etc/containers/systemd/cloudflared.container
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart cloudflared
+
+- name: Show ready message
+  ansible.builtin.debug:
+    msg: "Use container names and internal ports (e.g., http://jellyfin:8096) to publish services through tunnel."
