@@ -8,7 +8,7 @@ The playbooks in this media server can be used to set up:
 - [Jellyfin](https://jellyfin.org/) for viewing media.
 - [Calibre](https://calibre-ebook.com/) and [calibre-web](https://github.com/janeczku/calibre-web) for uploading and reading books.
 - A set of \*arr apps I use, including Radarr, Sonarr, Prowlarr, SABnzbd, and Seerr.
-- [Caddy](https://caddyserver.com/) for reverse proxying services so they're available on the web.
+- [Cloudflare Tunnels](https://developers.cloudflare.com/tunnel/) for serving services on the web.
 
 *All* deployed services using these playbooks are run in containers using Podman.
 
@@ -269,49 +269,30 @@ The following table outlines the secret variables that may need to be set for th
 | -------------------------- | ------------------------------------------------- | --------------------- |
 | v_jellyfin_domain          | The domain where your Jellyfin instance is served | When reverse proxying |
 
-## Playbook: setup-caddy.yml
+## Playbook: setup-cloudflared.yml
 
-Caddy is used to reverse proxy the services on the media server so that they can be served over HTTPS on the web.
+Cloudflare tunnels can be used to securely serve your services to the internet. This requires that your domain is hosted by Cloudflare.
 
-Caddy can be set up with the `setup-caddy.yml` playbook. The `caddy` role assumes you are using Cloudflare for your domains, so requires at minimum a Cloudflare API token to authenticate with.
+Cloudflare tunnels use the `cloudflared` service, which can be set up with the `setup-cloudflared.yml` playbook.
 
-**You should run this playbook *after* setting up the services that will be reverse proxied**. Otherwise, Caddy will complain about not being able to get certificates for your domains.
+**You should run this playbook *after* setting up the services that will be reverse proxied**.
 
 ```shell
-ansible-playbook -i inventory setup-caddy.yml
+ansible-playbook -i inventory setup-cloudflared.yml
 ```
 
-The services that caddy reverse proxies should be defined in `host_vars/homeserver.yml`. The `reverse_proxy_hosts` should be a list of objects containing three attributes (see below). For example, this will set Caddy to reverse proxy two services:
+Services needs to be on the shared `web-services.network` to be accessible by `cloudflared`. You do this by setting the `service_reverse_proxy` settings to true when setting up the other services.
 
-```yaml
-caddy:
-  reverse_proxy_hosts:
-    - domain_name: the-public.domain.com
-      container_name: the_container_name
-      port: the_exposed_port
-    - domain_name: example.com
-      container_name: the_other_container_name
-      port: the_other_exposed_port
-```
+To set up individual tunnels, see the following guide from Cloudflare: [Get started with Cloudflare Tunnels](https://developers.cloudflare.com/tunnel/get-started/).
 
-Any container or pod that uses the `web-services.network` can be reverse proxied by Caddy. If you want to reverse proxy a service in a Pod, you should reference the name of the pod with the `container_name`, not the name of the service inside the pod.
+Since the services you're sharing are within Podman containers, you must use **the name of the service** and its port to reverse proxy it. For example, the Jellyfin service has the name `jellyfin`, so you would tell Cloudflare to tunnel `http://jellyfin:8096`. If a service runs within a pod, use the name of the pod instead. For example, to tell Cloudflare to tunnel Seerr (within the `starrapps` pod), you would use the URL `http://starrapps:5055`.
 
-If your host does not have a static IP (e.g., if your ISP does not allow it), there is an included script that is deployed that will update the IPv4 address of your domains to the host's IP address whenever it changes. To enable this feature, set:
-
-```yaml
-caddy:
-  host_ip_is_static: false
-```
-
-And the script will be deployed automatically. All of the DNS records within the set `caddy_cloudflare_zone_id` (i.e., the given Zone in Cloudflare) will have the IP address of their DNS A records set to the remote host's IP address.
-
-Note that you will need to enable port forwarding for ports 80/tcp, 443/tcp, and 443/udp on your router as well if you want your services publicly accessible.
+You do not need a static IP or port forwarding on your router with Cloudflare tunnels.
 
 ### Secret Variables
 
-The following table outlines the secret variables that may need to be set for this playbook to work.
+The following table outlines the secret variables that need to be set for this playbook to work.
 
-| Name                         | Description                                                  | Requirement                |
-| ---------------------------- | ------------------------------------------------------------ | -------------------------- |
-| v_caddy_cloudflare_api_token | The cloudflare API token used for authentication             | Always required            |
-| v_caddy_cloudflare_zone_id   | The zone ID of the DNS records pointing to the remote server | When host IP is not static |
+| Name                         | Description                                                        | Requirement                |
+| ---------------------------- | ------------------------------------------------------------------ | -------------------------- |
+| v_cloudflared_tunnel_token   | The token Cloudflare generates for you when you set the tunnel up. | Always required            |
