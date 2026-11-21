@@ -3,16 +3,20 @@ Description="Cloudflare Zero Trust Tunnel"
 After=network-online.target
 
 [Container]
-Image=docker.io/cloudflare/cloudflared:2026.10.7
-Name=cloudflared
+Image=docker.io/cloudflare/cloudflared:2026.11.1
+ContainerName=cloudflared
 Exec=tunnel --no-autoupdate run
 
-# Shared network with other pods/containers
+# The shared network with other pods/containers
 Network=web-services.network
+
+# Volumes
+# The tunnel token, kept out of this unit file and mounted read-only
+Volume=/etc/cloudflared/tunnel.token:/run/secrets/tunnel.token:ro,Z
 
 # Environment variables
 Environment=TZ={{ cloudflared_timezone }}
-Environment=TUNNEL_TOKEN={{ cloudflared_tunnel_token }}
+Environment=TUNNEL_TOKEN_FILE=/run/secrets/tunnel.token
 
 # Hardens the container by dropping unnecessary root privileges
 SecurityLabelDisable=true

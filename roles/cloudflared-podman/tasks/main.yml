@@ -21,6 +21,28 @@
     group: root
     mode: "0755"
 
+- name: Create cloudflared config directory
+  become: true
+  ansible.builtin.file:
+    path: /etc/cloudflared
+    state: directory
+    owner: root
+    group: root
+    mode: "0700"
+
+- name: Deploy tunnel token file
+  become: true
+  no_log: true
+  # Group 65532 is the nonroot user/group in the cloudflared image,
+  # which must read the file through the bind mount
+  ansible.builtin.copy:
+    content: "{{ cloudflared_tunnel_token }}"
+    dest: /etc/cloudflared/tunnel.token
+    owner: root
+    group: "65532"
+    mode: "0640"
+  notify: Restart cloudflared
+
 - name: Deploy shared web-services network definition
   become: true
   ansible.builtin.copy:
